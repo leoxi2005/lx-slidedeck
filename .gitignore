@@ -1,0 +1,17 @@
+# Thư mục build — sinh lại được bằng cmake, không cần lưu
+out/
+out-release/
+build/*/CMakeFiles/
+dist/
+
+# Sản phẩm build
+*.bundle/
+*.dll
+*.o
+*.a
+
+# macOS
+.DS_Store
+
+# Thư mục ảnh do Export Deck sinh ra
+*_LXSD/
