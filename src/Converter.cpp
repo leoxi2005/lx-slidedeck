@@ -12,10 +12,13 @@
 namespace lxsd
 {
 /// Implemented on Windows in PowerPointRenderer.cpp; the stub elsewhere just says no.
+/// `width` and `height` are in-out: PowerPoint can refuse a very large export, and the
+/// renderer settles on a size that works and reports it back so the manifest matches the
+/// images that were actually written.
 bool RenderWithPowerPoint( const std::string& packagePath,
 						   int stepCount,
-						   int width,
-						   int height,
+						   int& width,
+						   int& height,
 						   const std::string& outputDir,
 						   const ConvertCallbacks& callbacks,
 						   int timeoutSeconds,

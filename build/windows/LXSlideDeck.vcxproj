@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{7C4F1B6A-2E19-4D53-9E2C-5F0A1D3B8E11}</ProjectGuid>
+    <RootNamespace>LXSlideDeck</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <TargetName>LXSlideDeck</TargetName>
+    <OutDir>$(SolutionDir)..\..\dist\windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\out-msvc\$(Configuration)\</IntDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src;$(ProjectDir)..\..\third_party\ffgl\source\lib;$(ProjectDir)..\..\third_party\ffgl\deps\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;GLEW_STATIC;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <!-- The plugin throws across its own internals and catches at every FFGL entry point. -->
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <!-- FFGL finds the plugin through this one exported symbol. -->
+      <ModuleDefinitionFile>$(ProjectDir)LXSlideDeck.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\third_party\ffgl\deps\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <!-- /MT: static runtime, so the show machine needs no VC redistributable. -->
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="..\..\src\LXSlideDeck.cpp" />
+    <ClCompile Include="..\..\src\Worker.cpp" />
+    <ClCompile Include="..\..\src\Converter.cpp" />
+    <ClCompile Include="..\..\src\ComDispatch.cpp" />
+    <ClCompile Include="..\..\src\PowerPointRenderer.cpp" />
+    <ClCompile Include="..\..\src\PowerPointRendererStub.cpp" />
+    <ClCompile Include="..\..\src\Pptx.cpp" />
+    <ClCompile Include="..\..\src\XmlLite.cpp" />
+    <ClCompile Include="..\..\src\Zip.cpp" />
+    <ClCompile Include="..\..\src\DeckLogic.cpp" />
+    <ClCompile Include="..\..\src\ImageDecode.cpp" />
+    <ClCompile Include="..\..\src\LruPolicy.cpp" />
+    <ClCompile Include="..\..\src\Manifest.cpp" />
+    <ClCompile Include="..\..\src\Platform.cpp" />
+    <ClCompile Include="..\..\src\ScaleMode.cpp" />
+    <ClCompile Include="..\..\src\Sha1.cpp" />
+    <ClCompile Include="..\..\src\miniz.c" />
+    <ClCompile Include="..\..\third_party\ffgl\source\lib\FFGLSDK.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="..\..\src\ComDispatch.h" />
+    <ClInclude Include="..\..\src\Converter.h" />
+    <ClInclude Include="..\..\src\DeckLogic.h" />
+    <ClInclude Include="..\..\src\ImageDecode.h" />
+    <ClInclude Include="..\..\src\LXSlideDeck.h" />
+    <ClInclude Include="..\..\src\LruPolicy.h" />
+    <ClInclude Include="..\..\src\Manifest.h" />
+    <ClInclude Include="..\..\src\Platform.h" />
+    <ClInclude Include="..\..\src\Pptx.h" />
+    <ClInclude Include="..\..\src\ScaleMode.h" />
+    <ClInclude Include="..\..\src\Shaders.inc" />
+    <ClInclude Include="..\..\src\Sha1.h" />
+    <ClInclude Include="..\..\src\Worker.h" />
+    <ClInclude Include="..\..\src\XmlLite.h" />
+    <ClInclude Include="..\..\src\Zip.h" />
+    <ClInclude Include="..\..\src\miniz.h" />
+    <ClInclude Include="..\..\src\stb_image.h" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

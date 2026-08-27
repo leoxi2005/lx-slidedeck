@@ -3,8 +3,8 @@
 Plugin FFGL cho **Resolume Arena**: chạy thẳng file `.pptx` trong Arena, tách từng bước
 animation của mỗi slide thành ảnh tĩnh rồi phát lại bằng crossfade trên GPU.
 
-Chạy trên **macOS** (đã kiểm chứng: Arena 7.23.2, universal arm64 + x86_64).
-Bản Windows: source đã có, chưa build.
+Chạy trên **macOS** (đã kiểm chứng trong Arena 7.23.2, universal arm64 + x86_64) và
+**Windows x64** (đã build và kiểm tra được symbol/phụ thuộc, chưa nạp thử trong Arena).
 
 ---
 
@@ -62,11 +62,34 @@ Thiếu cái nào là dừng, không đóng gói.
 
 Xem [DEPLOY.md](DEPLOY.md) cho quy trình mang sang máy khác.
 
-## Build trên Windows
+## Build cho Windows
 
-**Chưa làm.** Toàn bộ code chung đã sẵn sàng và có `#if defined( _WIN32 )` ở đúng chỗ, nhưng
-project MSVC và backend PowerPoint COM (`RenderWithPowerPoint`) thì chưa viết — hiện chỉ có
-stub trả về lỗi. Máy phát triển là Mac nên chưa compile kiểm chứng được dòng nào cho Windows.
+Hai đường, cùng một source.
+
+**A. MSVC — bản chính thức theo spec**
+
+Mở `build/windows/LXSlideDeck.sln` bằng Visual Studio 2022, chọn `Release | x64`, Build.
+Ra `dist/windows/Release/LXSlideDeck.dll`. Dùng toolset v143, C++17, `/MT` (runtime tĩnh,
+máy show không cần cài VC redistributable).
+
+**B. Cross-compile từ macOS bằng MinGW-w64**
+
+```bash
+brew install mingw-w64
+./scripts/build-windows-mingw.sh      # → dist/LXSlideDeck.dll
+```
+
+Đường này tồn tại vì MSVC chỉ chạy trên Windows, mà máy phát triển là Mac. Nó là khác biệt
+giữa "code Windows đã viết" và "code Windows link được và xuất đúng symbol host cần".
+Script tự kiểm tra sau khi link: có xuất `plugMain` không, và có phụ thuộc DLL nào ngoài
+Windows không. Thiếu là dừng.
+
+Kết quả: **2.0 MB, một file duy nhất**, phụ thuộc đúng `KERNEL32 / USER32 / GDI32 /
+OPENGL32 / OLE32 / OLEAUT32 / api-ms-win-crt-*` — toàn bộ là DLL có sẵn của Windows. C++
+runtime được link tĩnh nên không cần chép kèm gì.
+
+**Chưa kiểm chứng:** chưa có Windows để nạp thử trong Arena, và backend PowerPoint COM chưa
+chạy thật lần nào. Xem phần "Còn nợ" ở cuối.
 
 ---
 
@@ -138,6 +161,18 @@ Spec ban đầu định dùng PowerPoint COM để đọc animation. Đọc th�
 4. **Ẩn chữ bằng alpha=0 luôn được**, kể cả chữ tô gradient — cách cũ qua COM thì không.
 
 Bốn cái bẫy COM mà spec cảnh báo đều biến mất theo, vì ta không còn đọc animation qua COM.
+
+---
+
+## Còn nợ
+
+* **Chưa nạp thử `.dll` trong Resolume trên Windows.** Đã kiểm tra được symbol và phụ
+  thuộc, nhưng chưa có máy Windows để chạy.
+* **Backend PowerPoint COM chưa chạy thật lần nào.** Code compile sạch cho Windows nhưng
+  chưa có PowerPoint để gọi. Nếu nó hỏng, vẫn còn đường lui: cài LibreOffice trên máy
+  Windows, plugin tự dùng nó.
+* **Ô Status còn phần chẩn đoán** dạng `[b8 scale=2 vp=1920x1080 img=3840x2160]`. Hữu ích
+  lúc dò lỗi từ xa, nên tạm để lại; gỡ trong `UpdateDiagnostics()` khi thấy không cần nữa.
 
 ---
 

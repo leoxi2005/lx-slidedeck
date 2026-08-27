@@ -13,7 +13,7 @@ bool IsPowerPointAvailable()
 	return false;
 }
 
-bool RenderWithPowerPoint( const std::string&, int, int, int, const std::string&,
+bool RenderWithPowerPoint( const std::string&, int, int&, int&, const std::string&,
 						   const ConvertCallbacks&, int, std::string& error )
 {
 	error = "PowerPoint automation is Windows only";

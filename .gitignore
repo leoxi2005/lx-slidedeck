@@ -1,6 +1,8 @@
 # Thư mục build — sinh lại được bằng cmake, không cần lưu
 out/
 out-release/
+out-windows/
+out-msvc/
 build/*/CMakeFiles/
 dist/
 
@@ -9,6 +11,9 @@ dist/
 *.dll
 *.o
 *.a
+
+# Nguồn GLEW tải về khi build Windows, không cần lưu
+third_party/glew-*/
 
 # macOS
 .DS_Store

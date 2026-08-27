@@ -85,3 +85,25 @@ khớp — dùng **Export Deck** thay vì chép cache.
 `.avc`. Copy project sang máy khác mà đường dẫn đổi thì phải trỏ lại Deck File một lần.
 Cách tránh: để deck và composition trong cùng một thư mục, và đặt thư mục đó ở vị trí
 giống nhau trên cả hai máy.
+
+---
+
+## Máy show Windows
+
+1. Build bằng một trong hai cách trong [README](README.md#build-cho-windows)
+2. Chép `LXSlideDeck.dll` vào:
+
+       %USERPROFILE%\Documents\Resolume Arena\Extra Effects\
+
+   Windows **không** có cơ chế quarantine như macOS, nên không cần lệnh gỡ cờ nào.
+3. Thoát hẳn Resolume Arena rồi mở lại
+4. Sources → gõ `LX` → kéo vào một ô clip
+5. Đọc ô Status. Trên Windows có PowerPoint phải thấy:
+
+       Idle — renderer: PowerPoint
+
+   Nếu thấy `LibreOffice not installed` thì PowerPoint chưa đăng ký COM trên máy đó —
+   mở PowerPoint lên một lần rồi bấm **Reload** trong plugin để dò lại.
+
+Cả hai đường A và B ở trên đều dùng được y hệt trên Windows. Đường B (mang thư mục ảnh)
+không cần PowerPoint lẫn LibreOffice, và là cấu hình tôi khuyên dùng cho ngày diễn.
